@@ -1,0 +1,29 @@
+#Verbo GET – listar todos os produtos
+GET http://localhost:8000/produto/ HTTP/1.1
+
+#Verbo GET – listar um produto específico
+GET http://localhost:8000/produto/10 HTTP/1.1
+
+#Verbo POST – adicionar um novo produto
+POST http://localhost:8000/produto/ HTTP/1.1
+content-type: application/json
+{
+  "nome": "Produto Exemplo",
+  "descricao": "Descrição do produto de exemplo",
+  "foto": null,  
+  "valor_unitario": 29.99
+}
+
+#Verbo PUT – atualizar um produto existente
+PUT http://localhost:8000/produto/2 HTTP/1.1
+content-type: application/json
+{
+  "nome": "Produto Exemplo Atualizado",
+  "descricao": "Descrição atualizada do produto",
+  "foto": null,  
+  "valor_unitario": 39.99
+}
+
+#Verbo DELETE – excluir um produto
+DELETE http://localhost:8000/produto/3 HTTP/1.1
+
