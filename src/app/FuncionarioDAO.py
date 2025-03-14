@@ -5,6 +5,11 @@ from domain.entities.Funcionario import Funcionario
 import db
 from infra.orm.FuncionarioModel import FuncionarioDB
 
+# import da segurança
+from typing import Annotated
+from fastapi import Depends
+from security import get_current_active_user, User
+
 router = APIRouter()
 
 # Criar as rotas/endpoints: GET, POST, PUT, DELETE
@@ -23,12 +28,15 @@ async def get_funcionario():
         session.close()
 
 @router.get("/funcionario/{id}", tags=["Funcionário"])
-async def get_funcionario(id: int):
+async def get_funcionario(id: int,current_user:Annotated[User, Depends(get_current_active_user)],):
     try:
         session = db.Session()
 
         # busca um com filtro
         dados = session.query(FuncionarioDB).filter(FuncionarioDB.id_funcionario == id).all()
+
+        print(current_user)
+
         return dados, 200
     
     except Exception as e:
@@ -37,7 +45,7 @@ async def get_funcionario(id: int):
         session.close()
 
 @router.post("/funcionario/", tags=["Funcionário"])
-async def post_funcionario(corpo: Funcionario):
+async def post_funcionario(corpo: Funcionario,current_user:Annotated[User, Depends(get_current_active_user)],):
   try:
         session = db.Session()
     
@@ -54,6 +62,8 @@ async def post_funcionario(corpo: Funcionario):
         session.add(dados)
         session.commit()
 
+        print(current_user)
+
         # Retorne o id do funcionário recém-criado
         return {"id": dados.id_funcionario}, 200
 
@@ -64,7 +74,7 @@ async def post_funcionario(corpo: Funcionario):
         session.close()
 
 @router.put("/funcionario/{id}", tags=["Funcionário"])
-async def put_funcionario(id: int, corpo: Funcionario):
+async def put_funcionario(id: int, corpo: Funcionario,current_user:Annotated[User, Depends(get_current_active_user)]):
     try:
         session = db.Session()
         # busca os dados atuais pelo id
@@ -77,10 +87,14 @@ async def put_funcionario(id: int, corpo: Funcionario):
         dados.senha = corpo.senha
         dados.matricula = corpo.matricula
         dados.grupo = corpo.grupo
+
         session.add(dados)
         session.commit()
 
+        print(current_user)
+
         return {"id": dados.id_funcionario}, 200
+    
     except Exception as e:
         session.rollback()
         return {"erro": str(e)}, 400
@@ -88,7 +102,7 @@ async def put_funcionario(id: int, corpo: Funcionario):
         session.close()
 
 @router.delete("/funcionario/{id}", tags=["Funcionário"])
-async def delete_funcionario(id: int):
+async def delete_funcionario(id: int,current_user:Annotated[User, Depends(get_current_active_user)],):
     try:
         session = db.Session()
 
@@ -96,6 +110,9 @@ async def delete_funcionario(id: int):
         dados = session.query(FuncionarioDB).filter(FuncionarioDB.id_funcionario == id).one()
         session.delete(dados)
         session.commit()
+
+        print(current_user)
+
         return {"id": dados.id_funcionario}, 200
     
     except Exception as e:
@@ -106,13 +123,16 @@ async def delete_funcionario(id: int):
 
 # valida o cpf e senha informado pelo usuário
 @router.post("/funcionario/login/", tags=["Funcionário - Login"])
-async def login_funcionario(corpo: Funcionario):
+async def login_funcionario(corpo: Funcionario,current_user:Annotated[User, Depends(get_current_active_user)],):
     try:
         session = db.Session()
 
         # one(), requer que haja apenas um resultado no conjunto de resultados
         # é um erro se o banco de dados retornar 0, 2 ou mais resultados e uma exceção será gerada
         dados = session.query(FuncionarioDB).filter(FuncionarioDB.cpf == corpo.cpf).filter(FuncionarioDB.senha == corpo.senha).one()
+
+        print(current_user)
+
         return dados, 200
     
     except Exception as e:
@@ -122,12 +142,15 @@ async def login_funcionario(corpo: Funcionario):
 
 # verifica se o CPF informado já esta cadastrado, retornado os dados atuais caso já esteja
 @router.get("/funcionario/cpf/{cpf}", tags=["Funcionário - Valida CPF"])
-async def cpf_funcionario(cpf: str):
+async def cpf_funcionario(cpf: str,current_user:Annotated[User, Depends(get_current_active_user)],):
     try:
         session = db.Session()
 
         # busca um com filtro, retornando os dados cadastrados
         dados = session.query(FuncionarioDB).filter(FuncionarioDB.cpf == cpf).all()
+
+        print(current_user)
+        
         return dados, 200
     except Exception as e:
         return {"erro": str(e)}, 400
