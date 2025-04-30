@@ -1,0 +1,41 @@
+version: '3.8'  # Adicione esta linha para especificar a versão do Compose
+
+services:
+  db:
+    image: mysql:8
+    container_name: mysql_commandas_api
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: comandas_db
+      MYSQL_USER: norian
+      MYSQL_PASSWORD: senha123
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    command: >
+      bash -c "
+      docker-entrypoint.sh mysqld &
+      pid=\$!
+      sleep 30 &&
+      mysql -u root -psenha123 -e 'CREATE DATABASE IF NOT EXISTS comandas_db;'
+      wait \$pid
+      "
+
+  comandas_api:
+    image: norianhenrique2001/comanda-api:latest
+    container_name: comandas_api
+    depends_on:
+      - db
+    environment:
+      MYSQL_DB_HOST: db:3306
+      MYSQL_DB_USER: norian
+      MYSQL_DB_PASSWORD: senha123
+    ports:
+      - "4443:4443"
+    restart: always
+
+volumes:
+  db_data:
+    driver: local

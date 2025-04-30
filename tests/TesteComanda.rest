@@ -1,0 +1,95 @@
+@token = eyJhbGciOiJIUzI1cwMTd9.UGVKOrjcoc4ZS5gQ42VKld11jXKMGX-ikYad4-vuT3w
+### Verbo GET – filtrar por id
+GET http://localhost:8000/comanda/1 HTTP/1.1
+
+Authorization: Bearer {{token}}
+### Verbo GET – filtrar por status
+GET http://localhost:8000/comanda/status/2 HTTP/1.1
+
+
+Authorization: Bearer {{token}}
+### Verbo POST – abre nova comanda
+POST http://127.0.0.1:8000/comanda HTTP/1.1
+
+Authorization: Bearer {{token}}
+content-type: application/json 
+{
+"comanda" : "1092",
+"data_hora" : "2023-10-02"
+,
+"status" :
+0,
+"funcionario_id" :
+1
+//,"cliente_id" : 0
+}
+
+### Verbo PUT – edita comanda
+PUT http://127.0.0.1:8000/comanda HTTP/1.1
+
+Authorization: Bearer {{token}}
+content-type: application/json 
+{
+"id_comanda" :
+1
+,
+"comanda" : "1092",
+"data_hora" : "2023-10-02"
+,
+"status" :
+2,
+"funcionario_id" :
+1
+//,"cliente_id" : 0
+}
+
+### Verbo POST – adiciona item na comanda - comanda_id
+POST http://127.0.0.1:8000/comanda/item HTTP/1.1
+
+Authorization: Bearer {{token}}
+content-type: application/json 
+{
+"comanda_id" :
+1
+,
+"produto_id" :
+1
+,
+"funcionario_id" :
+2
+,
+"quantidade" : 15
+,
+"valor_unitario" : 1.90
+}
+
+### Verbo GET – listar itens comanda - comanda_id
+GET http://localhost:8000/comanda/1/item HTTP/1.1
+
+
+Authorization: Bearer {{token}}
+
+### Verbo PUT – edita item comanda - comanda_id - id_comanda_produto
+PUT http://127.0.0.1:8000/comanda/item HTTP/1.1
+
+Authorization: Bearer {{token}}
+content-type: application/json 
+{
+"id_comanda_produto" :
+1
+,
+"comanda_id" :
+0,
+"produto_id" :
+0,
+"funcionario_id" :
+1
+,
+"quantidade" : 90
+,
+"valor_unitario" : 1.90 }
+
+### Verbo GET – Retorna o valor total da comanda - comanda_id
+GET http://localhost:8000/comandas/1 HTTP/1.1
+
+Authorization: Bearer {{token}}

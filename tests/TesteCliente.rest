@@ -1,0 +1,26 @@
+#Verbo GET – listar todos os clientes
+GET http://localhost:8000/cliente/ HTTP/1.1
+
+#Verbo GET – listar um cliente específico
+GET http://localhost:8000/cliente/10 HTTP/1.1
+
+#Verbo POST – adicionar um novo cliente
+POST http://localhost:8000/cliente/ HTTP/1.1
+content-type: application/json
+{
+  "nome": "Norian Henrique",
+  "cpf": "123.456.789-00",
+  "telefone": "(11) 98765-4321"
+}
+
+#Verbo PUT – atualizar um cliente existente
+PUT http://localhost:8000/cliente/2 HTTP/1.1
+content-type: application/json
+{
+  "nome": "Norian Henrique",
+  "cpf": "123.456.789-00",
+  "telefone": "(11) 91234-5678"
+}
+
+#Verbo DELETE – excluir um cliente
+DELETE http://localhost:8000/cliente/3 HTTP/1.1
