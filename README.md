@@ -7,7 +7,7 @@ Uma API robusta desenvolvida para gerenciar comandas de um estabelecimento, perm
 
 Em desenvolvimento
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 * **Gerenciamento de Clientes:**
     * Criação, leitura, atualização e exclusão (CRUD) de clientes.
